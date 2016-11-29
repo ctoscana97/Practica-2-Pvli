@@ -33,65 +33,36 @@ battle.setup({
             RPG.entities.characters.monsterBat
         ]
     }
+    
 });
 
 battle.on('start', function (data) {
     console.log('START', data);
 });
-
 battle.on('turn', function (data) {
     console.log('TURN', data);
-
     // TODO: render the characters
-
-    //var personajes = document.querySelector(#heroes);
-    //var tituloHeroes = document.getElementById("heroes");
-    //tituloHeroes.lastChild.nodeValue =  prettifyEffect(RPG.entities.characters.heroTank);
-    //tituloHeroes.style.color = "red";
-    var heroes = [
-    {name: 'Tank', hp: 80, maxHp: 80, mp: 30, maxMp: 30, id: 'Tank'},
-    {name: 'Wizz', hp: 40, maxHp: 40, mp: 100, maxMp: 100, id: 'Wizz'}
-    ];
-
-    var monsters = [
-    {name: 'Slime', hp: 40, maxHp: 40, mp: 50, maxMp: 50, id: 'Slime'},
-    {name: 'Bat', hp: 5, maxHp: 5, mp: 0, maxMp: 0, id: 'Bat'},
-    {name: 'Skeleton', hp: 100, maxHp: 100, mp: 0, maxMp: 0, id: 'Tank'},
-    {name: 'Bat', hp: 5, maxHp: 5, mp: 0, maxMp: 0, id: 'Bat 2'}
-    ];
-
     var listH = document.getElementById('heroes');
-    heroes.forEach(function (character) {
-        var li = document.createElement('li');
-        li.innerHTML = character.id + ' (HP: <strong>' + character.hp + '</strong>/'+ 
-        character.maxHp +', MP: <strong>' + character.mp + '</strong>/'+ character.maxMp + ')';
-        listH.appendChild(li);
-    });
-
     var listM = document.getElementById('monsters');
-    monsters.forEach(function (character) {
+    var hero = battle.characters.allFrom(heroes.id);
+    var monstruos = battle.characters.allFrom(monsters.id);
+    for(var character in hero){
         var li = document.createElement('li');
-        li.innerHTML = character.id + ' (HP: <strong>' + character.hp + '</strong>/'+ 
-        character.maxHp +', MP: <strong>' + character.mp + '</strong>/'+ character.maxMp + ')';
+        li.innerHTML = hero[character].name + ' (HP: <strong>' + hero[character].hp + '</strong>/' + 
+        hero[character].maxHp + ', MP: <strong>' + hero[character].mp + '</strong>/'+ hero[character].maxMp + ')';
+        listH.appendChild(li);
+
+    }
+	for(var character in monstruos){
+        var li = document.createElement('li');
+        li.innerHTML = monstruos[character].name + ' (HP: <strong>' + monstruos[character].hp + '</strong>/' + 
+        monstruos[character].maxHp + ', MP: <strong>' + monstruos[character].mp + '</strong>/'+ monstruos[character].maxMp + ')';
         listM.appendChild(li);
-    });
-    
 
-    var lista = document.getElementsByTagName("");
-    lista.style.color = "red";
-    personajesH.getElementById("tank").innerHTML = "hola";
-    //element.setAttribute(attribute, value)
-    var hp = personajesH.getAttribute("tank"); // 
-    hp.nodeValue = 80; // 
-    personajesH.setAttribute("tank", 80);
-
-    var tank = document.querySelector("li.data-chara-id[name=mojon]");
-
-    //document.getElementById('').innerHTML = ;
+    }
     
     // TODO: highlight current character
-    // TODO: show battle actions form
-    //obj.setActive()
+    // TODO: show battle actions 
 });
 
 battle.on('info', function (data) {
