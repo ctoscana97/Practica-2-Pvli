@@ -44,24 +44,28 @@ battle.on('turn', function (data) {
     // TODO: render the characters
     var listH = document.getElementById('heroes');
     var listM = document.getElementById('monsters');
+    console.log(listH);
     var hero = battle.characters.allFrom(heroes.id);
     var monstruos = battle.characters.allFrom(monsters.id);
     for(var character in hero){
         var li = document.createElement('li');
-        li.innerHTML = hero[character].name + ' (HP: <strong>' + hero[character].hp + '</strong>/' + 
-        hero[character].maxHp + ', MP: <strong>' + hero[character].mp + '</strong>/'+ hero[character].maxMp + ')';
+        li.innerHTML = hero[character].name + '<code>' + ' (HP: <strong>' + hero[character].hp + '</strong>/' + 
+        hero[character].maxHp + ', MP: <strong>' + hero[character].mp + '</strong>/'+ hero[character].maxMp + ')'; + '</code>';
+        li.dataset.charaid = character;
         listH.appendChild(li);
 
     }
 	for(var character in monstruos){
         var li = document.createElement('li');
-        li.innerHTML = monstruos[character].name + ' (HP: <strong>' + monstruos[character].hp + '</strong>/' + 
-        monstruos[character].maxHp + ', MP: <strong>' + monstruos[character].mp + '</strong>/'+ monstruos[character].maxMp + ')';
+        li.innerHTML = monstruos[character].name + '<code>' + ' (HP: <strong>' + monstruos[character].hp + '</strong>/' + 
+        monstruos[character].maxHp + ', MP: <strong>' + monstruos[character].mp + '</strong>/'+ monstruos[character].maxMp + ')'; + '</code>';
+        li.dataset.charaid = character;
         listM.appendChild(li);
 
     }
-    
     // TODO: highlight current character
+    var persoActivo = document.querySelector('[data-charaid=' + data.activeCharacterId + ']');
+    persoActivo.classList.add('active');
     // TODO: show battle actions 
 });
 
