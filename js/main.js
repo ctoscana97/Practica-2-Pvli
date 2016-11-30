@@ -42,19 +42,22 @@ battle.on('start', function (data) {
 battle.on('turn', function (data) {
     console.log('TURN', data);
     // TODO: render the characters
+    console.log(this._charactersById); //Cambiar después el nombre por esto, para que no haya dos "bat"
     var listH = document.getElementById('heroes');
     var listM = document.getElementById('monsters');
     var hero = battle.characters.allFrom(heroes.id);
     var monstruos = battle.characters.allFrom(monsters.id);
     for(var character in hero){
         var li = document.createElement('li');
+        li.setAttribute("id", hero[character].name); //necesitamos crear un id para el querySelector
         li.innerHTML = hero[character].name + ' (HP: <strong>' + hero[character].hp + '</strong>/' + 
         hero[character].maxHp + ', MP: <strong>' + hero[character].mp + '</strong>/'+ hero[character].maxMp + ')';
         listH.appendChild(li);
 
     }
-	for(var character in monstruos){
+    for(var character in monstruos){
         var li = document.createElement('li');
+        li.setAttribute("id", monstruos[character].name);//necesitamos crear un id para el querySelector
         li.innerHTML = monstruos[character].name + ' (HP: <strong>' + monstruos[character].hp + '</strong>/' + 
         monstruos[character].maxHp + ', MP: <strong>' + monstruos[character].mp + '</strong>/'+ monstruos[character].maxMp + ')';
         listM.appendChild(li);
@@ -62,6 +65,9 @@ battle.on('turn', function (data) {
     }
     
     // TODO: highlight current character
+    console.log(data.activeCharacterId);
+    var activo = document.querySelector('#'+data.activeCharacterId);
+    activo.classList.add("active");
     // TODO: show battle actions 
 });
 
