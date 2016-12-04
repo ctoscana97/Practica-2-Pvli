@@ -66,6 +66,16 @@ battle.on('turn', function (data) {
     var persoActivo = document.querySelector('[data-charaid=' + data.activeCharacterId + ']');
     persoActivo.classList.add('active');
     // TODO: show battle actions 
+    var opcionesDeBatalla = document.querySelector('.choices');
+    var lista = battle.options.list();
+    actionForm.style.display = 'block';
+    for (var accion in lista){
+        var li = document.createElement('li');
+        li.innerHTML = '<label><input type="radio" name="option" value=' + lista[accion] + '>' + lista[accion] + '</label>';
+        opcionesDeBatalla.appendChild(li);
+    }
+
+
 });
 
 battle.on('info', function (data) {
