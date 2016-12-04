@@ -46,6 +46,8 @@ battle.on('turn', function (data) {
     var listM = document.getElementById('monsters');
     var hero = battle.characters.allFrom(heroes.id);
     var monstruos = battle.characters.allFrom(monsters.id);
+    listH.innerHTML = "";
+    listM.innerHTML = "";
     for(var character in hero){
         var li = document.createElement('li');
         li.innerHTML = hero[character].name + '<code>' + ' (HP: <strong>' + hero[character].hp + '</strong>/' + 
@@ -63,16 +65,16 @@ battle.on('turn', function (data) {
 
     }
     // TODO: highlight current character
-    var persoActivo = document.querySelector('[data-charaid=' + data.activeCharacterId + ']');
+    var persoActivo = document.querySelector('[data-charaid="' + data.activeCharacterId + '"]');
     persoActivo.classList.add('active');
     // TODO: show battle actions 
     var opcionesDeBatalla = document.querySelector('.choices');
     var lista = battle.options.list();
     actionForm.style.display = 'block';
+    opcionesDeBatalla.innerHTML = "";
     for (var accion in lista){
-        var li = document.createElement('li');
-        li.innerHTML = '<label><input type="radio" name="option" value=' + lista[accion] + '>' + lista[accion] + '</label>';
-        opcionesDeBatalla.appendChild(li);
+        render = '<li><label><input type="radio" name="option" value="'+lista[accion]+'" required> '+lista[accion]+'</label></li>';
+        opcionesDeBatalla.innerHTML += render;
     }
 
 
@@ -102,6 +104,8 @@ window.onload = function () {   //LLamada una vez cargados todos los recursos
         evt.preventDefault();
 
         // TODO: select the action chosen by the player
+        var action = actionForm.elements['option'].value;
+        battle.options.select(action);
         // TODO: hide this menu
         // TODO: go to either select target menu, or to the select spell menu
     });
