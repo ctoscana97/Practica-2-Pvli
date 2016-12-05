@@ -106,9 +106,7 @@ battle.on('turn', function (data) {
     var caster = this._activeCharacter;
     var grimorio = this._grimoires[caster.party];
     hechizos.innerHTML = '';
-    console.log(grimorio);
     var checker = Object.keys(grimorio);
-    console.log(checker);
     var botonDeCast = spellForm.querySelector("button");
     if (checker.length === 0){
         botonDeCast.disabled = true;
@@ -127,6 +125,17 @@ battle.on('info', function (data) {
     console.log('INFO', data);
 
     // TODO: display turn info in the #battle-info panel
+    var info = prettifyEffect(data);
+    if (data.action === "defend"){
+         infoPanel.innerHTML =  data.activeCharacterId + ' ' + data.action + ' and his new defense is: ' + data.newDefense + '.';
+    }
+    else{
+        var efecto = prettifyEffect(data.effect);
+        infoPanel.innerHTML =  data.activeCharacterId + ' ' + data.action + ' on ' + data.targetId;
+        if (data.success === true){
+         infoPanel.innerHTML += '. Effect: '+ efecto + '.';
+        } else infoPanel.innerHTML += '. The action failed.';
+    }
 });
 
 battle.on('end', function (data) {
