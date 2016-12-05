@@ -151,8 +151,11 @@ window.onload = function () {   //LLamada una vez cargados todos los recursos
     .addEventListener('click', function (evt) {
         evt.preventDefault();
         // TODO: cancel current battle options
+        battle.options.cancel();
         // TODO: hide this form
+        targetForm.style.display = 'none';
         // TODO: go to select action menu
+        actionForm.style.display = 'block';
     });
 
     spellForm.addEventListener('submit', function (evt) {
@@ -170,8 +173,11 @@ window.onload = function () {   //LLamada una vez cargados todos los recursos
     .addEventListener('click', function (evt) {
         evt.preventDefault();
         // TODO: cancel current battle options
+        battle.options.cancel();
         // TODO: hide this form
+        spellForm.style.display = 'none';
         // TODO: go to select action menu
+        actionForm.style.display = 'block';
     });
 
     battle.start();
