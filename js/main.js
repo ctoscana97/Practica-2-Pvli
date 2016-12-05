@@ -8,40 +8,8 @@ function prettifyEffect(obj) {
         return `${sign}${obj[key]} ${key}`;
     }).join(', ');
 }
-    /*
-    Apuntes: variable global document
-        desde javascript modificamos el document
-    */
-//document.querySelector(."examples").styles.backgroundColor = "red";
-//Styles.display="block"; para mostrar
-battle.setup({
-    heroes: {
-        members: [
-            RPG.entities.characters.heroTank,
-            RPG.entities.characters.heroWizard
-        ],
-        grimoire: [
-            RPG.entities.scrolls.health,
-            RPG.entities.scrolls.fireball
-        ]
-    },
-    monsters: {
-        members: [
-            RPG.entities.characters.monsterSlime,
-            RPG.entities.characters.monsterBat,
-            RPG.entities.characters.monsterSkeleton,
-            RPG.entities.characters.monsterBat
-        ]
-    }
-    
-});
 
-battle.on('start', function (data) {
-    console.log('START', data);
-});
-battle.on('turn', function (data) {
-    console.log('TURN', data);
-    // TODO: render the characters
+function MostrarPersonajes(){
     var listH = document.getElementById('heroes');
     var listM = document.getElementById('monsters');
     var hero = battle.characters.allFrom(heroes.id);
@@ -73,6 +41,37 @@ battle.on('turn', function (data) {
         }
 
     }
+}
+
+battle.setup({
+    heroes: {
+        members: [
+            RPG.entities.characters.heroTank,
+            RPG.entities.characters.heroWizard
+        ],
+        grimoire: [
+            RPG.entities.scrolls.health,
+            RPG.entities.scrolls.fireball
+        ]
+    },
+    monsters: {
+        members: [
+            RPG.entities.characters.monsterSlime,
+            RPG.entities.characters.monsterBat,
+            RPG.entities.characters.monsterSkeleton,
+            RPG.entities.characters.monsterBat
+        ]
+    }
+    
+});
+
+battle.on('start', function (data) {
+    console.log('START', data);
+});
+battle.on('turn', function (data) {
+    console.log('TURN', data);
+    // TODO: render the characters
+    MostrarPersonajes(data);
     // TODO: highlight current character
     var persoActivo = document.querySelector('[data-charaid="' + data.activeCharacterId + '"]');
     persoActivo.classList.add('active');
@@ -110,7 +109,6 @@ battle.on('turn', function (data) {
     var botonDeCast = spellForm.querySelector("button");
     if (checker.length === 0){
         botonDeCast.disabled = true;
-        //document.getElementById("myButton").disabled = true;
     } else botonDeCast.disabled = false;
     for (var hechizo in grimorio){
         var li = document.createElement('li');
@@ -142,15 +140,16 @@ battle.on('end', function (data) {
     console.log('END', data);
 
     // TODO: re-render the parties so the death of the last character gets reflected
+    MostrarPersonajes();
     // TODO: display 'end of battle' message, showing who won
+    infoPanel.innerHTML = 'La party ganadora ha sido: ' + data.winner;
 });
 
-window.onload = function () {   //LLamada una vez cargados todos los recursos
-    actionForm = document.querySelector('form[name=select-action]'); //form, tipo de etiqueta [atributos = valor] //busqueda unica
-    targetForm = document.querySelector('form[name=select-target]'); //En vez de name ponemos el style (para el estilo claro)
-    spellForm = document.querySelector('form[name=select-spell]');  //buscar por ID es util (son unicos)
-    infoPanel = document.querySelector('#battle-info'); //# es ID
-    //buscar por conjunto = buscar por query
+window.onload = function () {
+    actionForm = document.querySelector('form[name=select-action]');
+    targetForm = document.querySelector('form[name=select-target]');
+    spellForm = document.querySelector('form[name=select-spell]');
+    infoPanel = document.querySelector('#battle-info');
 
     actionForm.addEventListener('submit', function (evt) {
         evt.preventDefault();
