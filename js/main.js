@@ -46,8 +46,8 @@ battle.on('turn', function (data) {
     var listM = document.getElementById('monsters');
     var hero = battle.characters.allFrom(heroes.id);
     var monstruos = battle.characters.allFrom(monsters.id);
-    listH.innerHTML = "";
-    listM.innerHTML = "";
+    listH.innerHTML = '';
+    listM.innerHTML = '';
     for(var character in hero){
         var li = document.createElement('li');
         li.innerHTML = hero[character].name + '<code>' + ' (HP: <strong>' + hero[character].hp + '</strong>/' + 
@@ -67,14 +67,25 @@ battle.on('turn', function (data) {
     // TODO: highlight current character
     var persoActivo = document.querySelector('[data-charaid="' + data.activeCharacterId + '"]');
     persoActivo.classList.add('active');
-    // TODO: show battle actions 
-    var opcionesDeBatalla = document.querySelector('.choices');
-    var lista = battle.options.list();
+    // TODO: show battle actions
+    // Opciones
+    var opcionesDeBatalla = actionForm.querySelector('.choices');
+    var opciones = battle.options.list();
     actionForm.style.display = 'block';
-    opcionesDeBatalla.innerHTML = "";
-    for (var accion in lista){
-        render = '<li><label><input type="radio" name="option" value="'+lista[accion]+'" required> '+lista[accion]+'</label></li>';
-        opcionesDeBatalla.innerHTML += render;
+    opcionesDeBatalla.innerHTML = '';
+    for (var accion in opciones){
+        var li = document.createElement('li');
+        li.innerHTML = '<label><input type="radio" name="option" value=' + opciones[accion] + ' required>' + opciones[accion] + '</label>';
+        opcionesDeBatalla.appendChild(li);
+    }
+    // Targets
+    var targets = targetForm.querySelector('.choices');
+    var objetivos = this._charactersById;
+    targets.innerHTML = '';
+    for (var personaje in objetivos){
+        var li = document.createElement('li');
+        li.innerHTML = '<label><input type="radio" name="option" value=' + objetivos[personaje].name + ' required>' + objetivos[personaje].name + '</label>';
+        targets.appendChild(li);
     }
 
 
@@ -107,13 +118,24 @@ window.onload = function () {   //LLamada una vez cargados todos los recursos
         var action = actionForm.elements['option'].value;
         battle.options.select(action);
         // TODO: hide this menu
+        actionForm.style.display = 'none';
         // TODO: go to either select target menu, or to the select spell menu
+        if (action === 'cast'){
+            spellForm.style.display = 'block';
+        }
+        else if (action === 'attack') {
+            targetForm.style.display = 'block';
+        }
+
     });
 
     targetForm.addEventListener('submit', function (evt) {
         evt.preventDefault();
         // TODO: select the target chosen by the player
+        var target = targetForm.elements['option'].value;
+        battle.options.select(target);
         // TODO: hide this menu
+        targetForm.style.display = 'none';
     });
 
     targetForm.querySelector('.cancel')
