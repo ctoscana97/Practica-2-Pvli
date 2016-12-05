@@ -93,8 +93,9 @@ battle.on('turn', function (data) {
     targets.innerHTML = '';
     for (var personaje in objetivos){
         if (objetivos[personaje].hp !== 0){
+            console.log('dentro del bucle: ' + personaje);
         var li = document.createElement('li');
-        li.innerHTML = '<label><input type="radio" name="option" value=' + objetivos[personaje].name + ' required>' + objetivos[personaje].name + '</label>';
+        li.innerHTML = '<label><input type="radio" name="option" value="' + personaje + '"" required>' + personaje + '</label>';
         targets.appendChild(li);
         }
     }
@@ -153,6 +154,7 @@ window.onload = function () {   //LLamada una vez cargados todos los recursos
         evt.preventDefault();
         // TODO: select the target chosen by the player
         var objetivo = targetForm.elements['option'].value;
+        console.log(objetivo);
         battle.options.select(objetivo);
         // TODO: hide this menu
         targetForm.style.display = 'none';
