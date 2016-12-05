@@ -889,7 +889,7 @@ var lib = module.exports = {
         initiative: 9,
         defense: 50,
         weapon: lib.weapons.sword,
-        hp: 100,
+        hp: 1,
         mp: 0
       });
     },
@@ -899,7 +899,7 @@ var lib = module.exports = {
         initiative: 2,
         defense: 40,
         weapon: lib.weapons.pseudopode,
-        hp: 40,
+        hp: 1,
         mp: 50
       });
     },
@@ -909,7 +909,7 @@ var lib = module.exports = {
         initiative: 30,
         defense: 80,
         weapon: lib.weapons.fangs,
-        hp: 5,
+        hp: 1,
         mp: 0
       });
     }

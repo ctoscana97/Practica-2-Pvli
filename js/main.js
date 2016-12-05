@@ -33,7 +33,6 @@ function MostrarPersonajes(){
         li.innerHTML = monstruos[character].name + '<code>' + ' (HP: <strong>' + monstruos[character].hp + '</strong>/' + 
         monstruos[character].maxHp + ', MP: <strong>' + monstruos[character].mp + '</strong>/'+ monstruos[character].maxMp + ')'; + '</code>';
         li.dataset.charaid = character;
-        
         listM.appendChild(li);
         if (monstruos[character].hp === 0){
             var persoMuerto = document.querySelector('[data-charaid="' + character + '"]');
@@ -74,6 +73,7 @@ battle.on('turn', function (data) {
     MostrarPersonajes(data);
     // TODO: highlight current character
     var persoActivo = document.querySelector('[data-charaid="' + data.activeCharacterId + '"]');
+    persoActivo.classList.remove(data.party);
     persoActivo.classList.add('active');
 
     // TODO: show battle actions
@@ -96,6 +96,9 @@ battle.on('turn', function (data) {
         if (objetivos[personaje].hp !== 0){
         var li = document.createElement('li');
         li.innerHTML = '<label><input type="radio" name="option" value="' + personaje + '" required>' + personaje + '</label>';
+        if (objetivos[personaje].party === 'monsters'){
+            li.classList.add('monsters');
+        } else li.classList.add('heroes');
         targets.appendChild(li);
         }
     }
@@ -142,7 +145,8 @@ battle.on('end', function (data) {
     // TODO: re-render the parties so the death of the last character gets reflected
     MostrarPersonajes();
     // TODO: display 'end of battle' message, showing who won
-    infoPanel.innerHTML = 'La party ganadora ha sido: ' + data.winner;
+    infoPanel.innerHTML = 'La party ganadora ha sido: ' + data.winner +'  ';
+    infoPanel.innerHTML += '<button type="submit" onClick="history.go(0)">New Battle</button>';
 });
 
 window.onload = function () {
