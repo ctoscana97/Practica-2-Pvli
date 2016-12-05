@@ -50,18 +50,27 @@ battle.on('turn', function (data) {
     listM.innerHTML = '';
     for(var character in hero){
         var li = document.createElement('li');
+        
         li.innerHTML = hero[character].name + '<code>' + ' (HP: <strong>' + hero[character].hp + '</strong>/' + 
         hero[character].maxHp + ', MP: <strong>' + hero[character].mp + '</strong>/'+ hero[character].maxMp + ')'; + '</code>';
         li.dataset.charaid = character;
         listH.appendChild(li);
-
+        if (hero[character].hp === 0){
+            var persoMuerto = document.querySelector('[data-charaid="' + character + '"]');
+            persoMuerto.classList.add('dead');
+        }
     }
     for(var character in monstruos){
         var li = document.createElement('li');
         li.innerHTML = monstruos[character].name + '<code>' + ' (HP: <strong>' + monstruos[character].hp + '</strong>/' + 
         monstruos[character].maxHp + ', MP: <strong>' + monstruos[character].mp + '</strong>/'+ monstruos[character].maxMp + ')'; + '</code>';
         li.dataset.charaid = character;
+        
         listM.appendChild(li);
+        if (monstruos[character].hp === 0){
+            var persoMuerto = document.querySelector('[data-charaid="' + character + '"]');
+            persoMuerto.classList.add('dead');
+        }
 
     }
     // TODO: highlight current character
@@ -83,9 +92,11 @@ battle.on('turn', function (data) {
     var objetivos = this._charactersById;
     targets.innerHTML = '';
     for (var personaje in objetivos){
+        if (objetivos[personaje].hp !== 0){
         var li = document.createElement('li');
         li.innerHTML = '<label><input type="radio" name="option" value=' + objetivos[personaje].name + ' required>' + objetivos[personaje].name + '</label>';
         targets.appendChild(li);
+        }
     }
     // Hechizos disponibles
     var hechizos = spellForm.querySelector('.choices');
