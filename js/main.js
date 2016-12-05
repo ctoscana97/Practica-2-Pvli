@@ -8,21 +8,23 @@ function prettifyEffect(obj) {
         return `${sign}${obj[key]} ${key}`;
     }).join(', ');
 }
-
+//Método que muestra y actualiza la información de las dos partys en pantalla con nombre, hp actual y maná.
 function MostrarPersonajes(){
+    //Obtiene las listas preparadas de ambos para poder editar el html a través de ellas.
     var listH = document.getElementById('heroes');
     var listM = document.getElementById('monsters');
     var hero = battle.characters.allFrom(heroes.id);
     var monstruos = battle.characters.allFrom(monsters.id);
+    //Lo inicializamos vacío en cada turno para limpiarlo y no andar imprimiendo de más cada party.
     listH.innerHTML = '';
     listM.innerHTML = '';
     for(var character in hero){
         var li = document.createElement('li');
-        
         li.innerHTML = hero[character].name + '<code>' + ' (HP: <strong>' + hero[character].hp + '</strong>/' + 
         hero[character].maxHp + ', MP: <strong>' + hero[character].mp + '</strong>/'+ hero[character].maxMp + ')'; + '</code>';
         li.dataset.charaid = character;
         listH.appendChild(li);
+        //Añade la clase 'dead' al personaje si este está muerto con lo que se tacha automáticamente.
         if (hero[character].hp === 0){
             var persoMuerto = document.querySelector('[data-charaid="' + character + '"]');
             persoMuerto.classList.add('dead');
@@ -34,6 +36,7 @@ function MostrarPersonajes(){
         monstruos[character].maxHp + ', MP: <strong>' + monstruos[character].mp + '</strong>/'+ monstruos[character].maxMp + ')'; + '</code>';
         li.dataset.charaid = character;
         listM.appendChild(li);
+        //Añade la clase 'dead' al personaje si este está muerto con lo que se tacha automáticamente.
         if (monstruos[character].hp === 0){
             var persoMuerto = document.querySelector('[data-charaid="' + character + '"]');
             persoMuerto.classList.add('dead');
@@ -70,8 +73,10 @@ battle.on('start', function (data) {
 battle.on('turn', function (data) {
     console.log('TURN', data);
     // TODO: render the characters
+    //Se llama a MostrarPersonajes con la información del turno actual que es data.
     MostrarPersonajes(data);
     // TODO: highlight current character
+    //Añade al personaje activo la clase 'active' la cual marca de amarillo automáticamente a qué personaje le toca.
     var persoActivo = document.querySelector('[data-charaid="' + data.activeCharacterId + '"]');
     persoActivo.classList.remove(data.party);
     persoActivo.classList.add('active');
@@ -79,11 +84,15 @@ battle.on('turn', function (data) {
     // TODO: show battle actions
     // Opciones
     var opcionesDeBatalla = actionForm.querySelector('.choices');
+    //Llamamos a list() para que nos devuelva las diferentes opciones que tiene el active character.
     var opciones = battle.options.list();
+    //Mostramos visible este menú inicialmente en cada turno.
     actionForm.style.display = 'block';
+    //Inicializamos a 0 para no imprimir menús de más.
     opcionesDeBatalla.innerHTML = '';
     for (var accion in opciones){
         var li = document.createElement('li');
+        //Creamos un botón de selección circular para cada opción.
         li.innerHTML = '<label><input type="radio" name="option" value=' + opciones[accion] + ' required>' + opciones[accion] + '</label>';
         opcionesDeBatalla.appendChild(li);
     }
@@ -91,11 +100,15 @@ battle.on('turn', function (data) {
     // Targets
     var targets = targetForm.querySelector('.choices');
     var objetivos = this._charactersById;
+    //Inicializamos a 0 para no imprimir menús de más.
     targets.innerHTML = '';
     for (var personaje in objetivos){
+        //Condición añadida como extra para que no se pueda mostrar como objetivo a personajes ya muertos.
         if (objetivos[personaje].hp !== 0){
         var li = document.createElement('li');
+        //Creamos un botón de selección circular para cada opción.
         li.innerHTML = '<label><input type="radio" name="option" value="' + personaje + '" required>' + personaje + '</label>';
+        //Añade la clase 'monsters' o 'heroes' según la party para que se marque en un color diferente que se ha configurado desde el styles.css.
         if (objetivos[personaje].party === 'monsters'){
             li.classList.add('monsters');
         } else li.classList.add('heroes');
@@ -105,16 +118,21 @@ battle.on('turn', function (data) {
 
     // Hechizos disponibles
     var hechizos = spellForm.querySelector('.choices');
+    //Te devuelve el grimorio disponible de la party del personaje actual.
     var caster = this._activeCharacter;
     var grimorio = this._grimoires[caster.party];
+    //Inicializamos a 0 para no imprimir menús de más.
     hechizos.innerHTML = '';
+    //Comprobador de que hay algún hechizo disponible.
     var checker = Object.keys(grimorio);
     var botonDeCast = spellForm.querySelector("button");
+    //Deshabilita el botón si no hay ningún hechizo en el grimorio del personaje activo.
     if (checker.length === 0){
         botonDeCast.disabled = true;
     } else botonDeCast.disabled = false;
     for (var hechizo in grimorio){
         var li = document.createElement('li');
+        //Creamos un botón de selección circular para cada opción.
         li.innerHTML = '<label><input type="radio" name="option" value=' + grimorio[hechizo].name + ' required>' + grimorio[hechizo].name + '</label>';
         hechizos.appendChild(li);
     }
@@ -127,14 +145,24 @@ battle.on('info', function (data) {
 
     // TODO: display turn info in the #battle-info panel
     var info = prettifyEffect(data);
+    //Mensaje que se imprime al realizar la opción defender.
     if (data.action === "defend"){
-         infoPanel.innerHTML =  data.activeCharacterId + ' ' + data.action + ' and his new defense is: ' + data.newDefense + '.';
+         infoPanel.innerHTML = '<strong>' + data.activeCharacterId + '</strong> ' + data.action + ' and his new defense is: ' + data.newDefense + '.';
     }
-    else{
+    //Mensaje que se imprime al realizar la opción atacar.
+    else if (data.action === "attack"){
         var efecto = prettifyEffect(data.effect);
-        infoPanel.innerHTML =  data.activeCharacterId + ' ' + data.action + ' on ' + data.targetId;
+        infoPanel.innerHTML =  '<strong>' + data.activeCharacterId + '</strong> ' + data.action + ' on <strong>' + data.targetId;
         if (data.success === true){
-         infoPanel.innerHTML += '. Effect: '+ efecto + '.';
+         infoPanel.innerHTML += '. Effect: <strong>'+ efecto + '</strong>.';
+        } else infoPanel.innerHTML += '. The action failed.';
+    }
+    //Mensaje que se imprime al realizar la opción castear.
+    else if (data.action === "cast"){
+        var efecto = prettifyEffect(data.effect);
+        infoPanel.innerHTML = '<strong>' + data.activeCharacterId + '</strong> ' + data.action + ' <strong>' + data.scrollName + '</strong> on <strong>' + data.targetId + '</strong>';
+        if (data.success === true){
+         infoPanel.innerHTML +=  '. Effect: <strong>'+ efecto + '</strong>.';
         } else infoPanel.innerHTML += '. The action failed.';
     }
 });
