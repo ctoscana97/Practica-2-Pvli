@@ -87,6 +87,15 @@ battle.on('turn', function (data) {
         li.innerHTML = '<label><input type="radio" name="option" value=' + objetivos[personaje].name + ' required>' + objetivos[personaje].name + '</label>';
         targets.appendChild(li);
     }
+    // Hechizos disponibles
+    var hechizos = spellForm.querySelector('.choices');
+    var grimorio = this._grimoires['heroes'];
+    hechizos.innerHTML = '';
+    for (var hechizo in grimorio){
+        var li = document.createElement('li');
+        li.innerHTML = '<label><input type="radio" name="option" value=' + grimorio[hechizo].name + ' required>' + grimorio[hechizo].name + '</label>';
+        hechizos.appendChild(li);
+    }
 
 
 });
@@ -132,8 +141,8 @@ window.onload = function () {   //LLamada una vez cargados todos los recursos
     targetForm.addEventListener('submit', function (evt) {
         evt.preventDefault();
         // TODO: select the target chosen by the player
-        var target = targetForm.elements['option'].value;
-        battle.options.select(target);
+        var objetivo = targetForm.elements['option'].value;
+        battle.options.select(objetivo);
         // TODO: hide this menu
         targetForm.style.display = 'none';
     });
@@ -149,8 +158,12 @@ window.onload = function () {   //LLamada una vez cargados todos los recursos
     spellForm.addEventListener('submit', function (evt) {
         evt.preventDefault();
         // TODO: select the spell chosen by the player
+        var hechizoSeleccionado = spellForm.elements['option'].value;
+        battle.options.select(hechizoSeleccionado);
         // TODO: hide this menu
+        spellForm.style.display = 'none';
         // TODO: go to select target menu
+        targetForm.style.display = 'block';
     });
 
     spellForm.querySelector('.cancel')
