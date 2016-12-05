@@ -76,6 +76,7 @@ battle.on('turn', function (data) {
     // TODO: highlight current character
     var persoActivo = document.querySelector('[data-charaid="' + data.activeCharacterId + '"]');
     persoActivo.classList.add('active');
+
     // TODO: show battle actions
     // Opciones
     var opcionesDeBatalla = actionForm.querySelector('.choices');
@@ -87,22 +88,32 @@ battle.on('turn', function (data) {
         li.innerHTML = '<label><input type="radio" name="option" value=' + opciones[accion] + ' required>' + opciones[accion] + '</label>';
         opcionesDeBatalla.appendChild(li);
     }
+
     // Targets
     var targets = targetForm.querySelector('.choices');
     var objetivos = this._charactersById;
     targets.innerHTML = '';
     for (var personaje in objetivos){
         if (objetivos[personaje].hp !== 0){
-            console.log('dentro del bucle: ' + personaje);
         var li = document.createElement('li');
-        li.innerHTML = '<label><input type="radio" name="option" value="' + personaje + '"" required>' + personaje + '</label>';
+        li.innerHTML = '<label><input type="radio" name="option" value="' + personaje + '" required>' + personaje + '</label>';
         targets.appendChild(li);
         }
     }
+
     // Hechizos disponibles
     var hechizos = spellForm.querySelector('.choices');
-    var grimorio = this._grimoires['heroes'];
+    var caster = this._activeCharacter;
+    var grimorio = this._grimoires[caster.party];
     hechizos.innerHTML = '';
+    console.log(grimorio);
+    var checker = Object.keys(grimorio);
+    console.log(checker);
+    var botonDeCast = spellForm.querySelector("button");
+    if (checker.length === 0){
+        botonDeCast.disabled = true;
+        //document.getElementById("myButton").disabled = true;
+    } else botonDeCast.disabled = false;
     for (var hechizo in grimorio){
         var li = document.createElement('li');
         li.innerHTML = '<label><input type="radio" name="option" value=' + grimorio[hechizo].name + ' required>' + grimorio[hechizo].name + '</label>';
@@ -154,7 +165,6 @@ window.onload = function () {   //LLamada una vez cargados todos los recursos
         evt.preventDefault();
         // TODO: select the target chosen by the player
         var objetivo = targetForm.elements['option'].value;
-        console.log(objetivo);
         battle.options.select(objetivo);
         // TODO: hide this menu
         targetForm.style.display = 'none';
