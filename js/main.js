@@ -44,25 +44,54 @@ function MostrarPersonajes(){
 
     }
 }
+//////Método que hace las parties aleatorias en cada nueva batalla.
+//Función para obtener un número randon entre un mínimo y un máximo.
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+//Número destinado a ser el número de participantes en la party heroes.
+var numHeroes = getRandomInt(1,4);
+//Número destinado a ser el número de participantes en la party monsters.
+var numMonstruos = getRandomInt (1,4);
+//Arrays de la longitud del número random obtenido anteriormente entre 1 y 4.
+var heroArray = new Array (numHeroes);
+var monstersArray = new Array (numMonstruos);
+//Bucle que asigna cada hueco de la party heroes aleatoriamente.
+for (var i = 0; i < heroArray.length; i++){
+    var rnd = getRandomInt(1,2);
+    if (rnd === 1){
+        heroArray[i] = RPG.entities.characters.heroTank;
+    }
+    else if (rnd === 2){
+        heroArray[i] = RPG.entities.characters.heroWizard;
+    }
+}
+//Bucle que asigna cada hueco de la party monsters aleatoriamente.
+for (var i = 0; i < monstersArray.length; i++){
+    var rnd = getRandomInt(1,3);
+    if (rnd === 1){
+        monstersArray[i] = RPG.entities.characters.monsterSkeleton;
+    }
+    else if (rnd === 2){
+        monstersArray[i] = RPG.entities.characters.monsterSlime;
+    }
+    else if (rnd === 3){
+        monstersArray[i] = RPG.entities.characters.monsterBat;
+    }
+}
 
 battle.setup({
     heroes: {
-        members: [
-            RPG.entities.characters.heroTank,
-            RPG.entities.characters.heroWizard
-        ],
+        //Ahora a members le paso el array aleatorio declarado mas arriba.
+        members: heroArray,
         grimoire: [
             RPG.entities.scrolls.health,
             RPG.entities.scrolls.fireball
         ]
     },
     monsters: {
-        members: [
-            RPG.entities.characters.monsterSlime,
-            RPG.entities.characters.monsterBat,
-            RPG.entities.characters.monsterSkeleton,
-            RPG.entities.characters.monsterBat
-        ]
+        //Ahora a members le paso el array aleatorio declarado mas arriba.
+        members: monstersArray
     }
     
 });
