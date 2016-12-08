@@ -156,7 +156,7 @@ battle.on('turn', function (data) {
     var checker = Object.keys(grimorio);
     var botonDeCast = spellForm.querySelector("button");
     //Deshabilita el botón si no hay ningún hechizo en el grimorio del personaje activo.
-    if (checker.length === 0){
+    if (checker.length === 0 || caster.mp < 25){
         botonDeCast.disabled = true;
     } else botonDeCast.disabled = false;
     for (var hechizo in grimorio){
